@@ -14,7 +14,7 @@ import { ValidationFormFieldComponent } from '../validation-form-field/validatio
   imports: [ValidationSummaryComponent, ValidationContainerDirective, MatButtonModule, MatFormFieldModule, MatInputModule, ValidationFormFieldComponent, ValidationFieldErrorDirective],
   template: `
     
-      <div class="flex-column" style="display: flex; gap:1rem" [appValidationContainer]="validationErrors">
+      <form class="flex-column" style="display: flex; gap:1rem" [appValidationContainer]="validationErrors">
         <h1>a form</h1>
 
         <app-validation-summary />
@@ -23,19 +23,15 @@ import { ValidationFormFieldComponent } from '../validation-form-field/validatio
           <mat-form-field>
             <mat-label>Lastname</mat-label>
             <input matInput placeholder="LastName">
-            <ng-container *appValidationFieldError="let error">
-              <mat-error>{{error.error}}</mat-error>
-            </ng-container>
+            <mat-hint *appValidationFieldError="let error">{{error.error}}</mat-hint>
           </mat-form-field>
         </app-validation-form-field>
 
         <app-validation-form-field  propertyName="FirstName">
           <mat-form-field>
             <mat-label>Firstname</mat-label>
-            <input matInput placeholder="Firstname">
-            <ng-container *appValidationFieldError="let error">
-              <mat-error>{{error.error}}</mat-error>
-            </ng-container>
+            <input matInput placeholder="Firstname" >
+            <mat-hint *appValidationFieldError="let error">{{error.error}}</mat-hint>
           </mat-form-field>
         </app-validation-form-field>
         
@@ -54,10 +50,10 @@ import { ValidationFormFieldComponent } from '../validation-form-field/validatio
         </app-validation-form-field>
 
         <div class="flex">
-          <button mat-raised-button color="warn" (click)="validate()">Show the errors</button>
-          <button mat-raised-button (click)="clear()">Clean the errors</button>
+          <button mat-raised-button type="button" color="warn" (click)="validate()">Show the errors</button>
+          <button mat-raised-button type="button" (click)="clear()">Clean the errors</button>
         </div>
-      </div>
+      </form>
 
   `,
   styles: ``

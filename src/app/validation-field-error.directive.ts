@@ -1,4 +1,4 @@
-import { DestroyRef, Directive, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
+import { DestroyRef, Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { ValidationFieldHandlerService } from './validation-handler.service';
 import { ValidationError } from './data';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -8,9 +8,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
   standalone: true
 })
 export class ValidationFieldErrorDirective implements OnInit {
-
-  private errors: ValidationError[] = [];
-
   constructor(private validationFieldHandler: ValidationFieldHandlerService,
     private destroyedRef: DestroyRef,
     private viewContainer: ViewContainerRef,
@@ -21,13 +18,13 @@ export class ValidationFieldErrorDirective implements OnInit {
   ngOnInit(): void {
     this.validationFieldHandler.observeValidationErrors()
       .pipe(takeUntilDestroyed(this.destroyedRef))
-      .subscribe(errors => { this.errors = errors;this.updateView(); });
+      .subscribe(errors => this.updateView(errors) );
       this.validationFieldHandler.preventDisplayInFieldComponent();
   }
 
-  private updateView() {
+  private updateView(errors: ValidationError[]) {
     this.viewContainer.clear();
-    this.errors.forEach(error => {
+    errors.forEach(error => {
       this.viewContainer.createEmbeddedView(this.templateRef, {
         $implicit: error
       });
