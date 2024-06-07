@@ -1,16 +1,17 @@
+import { ValidationFieldErrorDirective } from './../validation-field-error.directive';
 import { Component } from '@angular/core';
 import { ValidationContainerDirective } from '../validation-container.directive';
 import { ValidationSummaryComponent } from '../validation-summary/validation-summary.component';
 import { ValidationErrors, validationErrros } from '../data';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input'; 
+import { MatInputModule } from '@angular/material/input';
 import { ValidationFormFieldComponent } from '../validation-form-field/validation-form-field.component';
 
 @Component({
   selector: 'app-first-form',
   standalone: true,
-  imports: [ValidationSummaryComponent, ValidationContainerDirective, MatButtonModule, MatFormFieldModule, MatInputModule, ValidationFormFieldComponent],
+  imports: [ValidationSummaryComponent, ValidationContainerDirective, MatButtonModule, MatFormFieldModule, MatInputModule, ValidationFormFieldComponent, ValidationFieldErrorDirective],
   template: `
     
       <div class="flex-column" style="display: flex; gap:1rem" [appValidationContainer]="validationErrors">
@@ -18,10 +19,13 @@ import { ValidationFormFieldComponent } from '../validation-form-field/validatio
 
         <app-validation-summary />
 
-        <app-validation-form-field  propertyName="LastName">
+        <app-validation-form-field propertyName="LastName">
           <mat-form-field>
             <mat-label>Lastname</mat-label>
             <input matInput placeholder="LastName">
+            <ng-container *appValidationFieldError="let error">
+              <mat-error>{{error.error}}</mat-error>
+            </ng-container>
           </mat-form-field>
         </app-validation-form-field>
 
@@ -29,6 +33,9 @@ import { ValidationFormFieldComponent } from '../validation-form-field/validatio
           <mat-form-field>
             <mat-label>Firstname</mat-label>
             <input matInput placeholder="Firstname">
+            <ng-container *appValidationFieldError="let error">
+              <mat-error>{{error.error}}</mat-error>
+            </ng-container>
           </mat-form-field>
         </app-validation-form-field>
         
@@ -60,8 +67,8 @@ export class FirstFormComponent {
   public validationErrors: ValidationErrors | undefined;
 
 
-  public validate() { 
-      this.validationErrors = { ...validationErrros }; 
+  public validate() {
+    this.validationErrors = { ...validationErrros };
   }
 
   public clear() {

@@ -83,10 +83,15 @@ export class ValidationSummaryHandlerService implements ValidationSummaryHandler
   }
 }
 
+export interface ValidationFieldOptions{
+  displayErrorsInFieldComponent: boolean;
+}
+
 @Injectable()
 export class ValidationFieldHandlerService implements ValidationFieldHandler {
 
   private errorsSubject = new BehaviorSubject<ValidationError[]>([]);
+  public validationFieldOptions: ValidationFieldOptions = {displayErrorsInFieldComponent: true}
 
   constructor(private validationDirector: ValidationDirectorService) {
   }
@@ -109,5 +114,9 @@ export class ValidationFieldHandlerService implements ValidationFieldHandler {
 
   registerFields(...fieldNames: String[]) {
     this.validationDirector.registerValidationField(this, ...fieldNames);
+  }
+
+  preventDisplayInFieldComponent(){
+    this.validationFieldOptions.displayErrorsInFieldComponent = false;
   }
 }

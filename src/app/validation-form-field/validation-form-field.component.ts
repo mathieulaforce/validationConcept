@@ -1,7 +1,7 @@
 import { Component, DestroyRef, Input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ValidationError } from '../data'; 
-import { ValidationFieldHandlerService } from '../validation-handler.service';
+import { ValidationFieldHandlerService, ValidationFieldOptions } from '../validation-handler.service';
 import { CommonModule } from '@angular/common'; 
 
 @Component({
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   template: `
   <div [class.error]="errors" [@fade]="errors">
     <ng-content></ng-content>
-    <ng-container *ngIf="errors">
+    <ng-container *ngIf="errors && options.displayErrorsInFieldComponent">
     @for (error of errors; track error.property) {
       <div>{{error.property}} - {{error.error}}</div>
     }
@@ -25,8 +25,11 @@ export class ValidationFormFieldComponent {
   @Input({ required: true }) propertyName!: String | String[];
 
   public errors: ValidationError[] | undefined = undefined;
+  public options: ValidationFieldOptions;
 
   constructor(private validationFieldHandler: ValidationFieldHandlerService, private destroyedRef: DestroyRef) {
+    // this feels wrong atm
+    this.options = validationFieldHandler.validationFieldOptions;
   }
 
   ngOnInit(): void {
